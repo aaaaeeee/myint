@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import LinkButton from '../ui/LinkButton';
 import * as ROUTES from '../../constants/routes';
 
+import SignOutButton from '../ui/SignOutButton';
+
 interface NavItemsProps {
   mobile?: boolean;
   clicked?: () => void;
@@ -31,11 +33,19 @@ const NavItems: React.FC<NavItemsProps> = ({ mobile, clicked }) => {
         </LinkWrapper>
         <LinkWrapper>
           <LinkButton
+            title="Sign In"
+            linkTo={ROUTES.SIGN_IN}
+            clicked={clicked}
+          />
+        </LinkWrapper>
+        <LinkWrapper>
+          <LinkButton
             title="Sign Up"
             linkTo={ROUTES.SIGN_UP}
             clicked={clicked}
           />
         </LinkWrapper>
+        <SignOutButton />
       </Ul>
     </Nav>
   );

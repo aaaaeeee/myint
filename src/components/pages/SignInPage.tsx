@@ -2,11 +2,11 @@ import React from 'react';
 import { useForm, FieldError } from 'react-hook-form';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
-import { useFirebase, useFirestore } from 'react-redux-firebase';
+import { useFirebase } from 'react-redux-firebase';
 import { DeepMap } from 'react-hook-form/dist/types/utils';
 import { FormWrapper, StyledForm } from '../../layout/Container';
 
-interface SignUpPageProps {}
+interface SignInPageProps {}
 type FormData = {
   email: string;
   password: string;
@@ -58,29 +58,25 @@ const SubmitButton = styled.button`
   }
 `;
 
-const SignUpPage: React.FC<SignUpPageProps> = () => {
+const SignInPage: React.FC<SignInPageProps> = () => {
   const [isLoading, setIsLoading] = React.useState(false);
   const { register, handleSubmit, errors } = useForm<FormData>();
   const firebase = useFirebase();
-  const firestore = useFirestore();
   const history = useHistory();
   const onSubmit = handleSubmit(async ({ email, password }) => {
     setIsLoading(true);
-    firebase
+    await firebase
       .auth()
-      .createUserWithEmailAndPassword(email, password)
+      .signInWithEmailAndPassword(email, password)
       .then((resp) => {
-        return firestore.collection('users').doc(resp.user?.uid).set({
-          email,
-        });
+        setIsLoading(false);
       })
       .catch((error) => {});
-    setIsLoading(false);
-    history.push('/protected');
+    history.push('/');
   });
   return (
     <FormWrapper>
-      <Title>Sign up here</Title>
+      <Title>Sign in</Title>
       <StyledForm onSubmit={onSubmit}>
         <InputWrapper>
           <FormInput
@@ -101,11 +97,11 @@ const SignUpPage: React.FC<SignUpPageProps> = () => {
         </InputWrapper>
         <InputWrapper>
           <SubmitButton type="submit" disabled={isLoading}>
-            Sign Up
+            Sign In
           </SubmitButton>
         </InputWrapper>
       </StyledForm>
     </FormWrapper>
   );
 };
-export default SignUpPage;
+export default SignInPage;
