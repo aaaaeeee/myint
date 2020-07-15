@@ -53,6 +53,10 @@ const SubmitButton = styled.button`
   font-size: 1.3rem;
   border-radius: 2rem;
   color: ${({ theme }) => theme.colors.main};
+  background-color: white;
+  &:hover {
+    font-weight: bold;
+  }
   &:disabled {
     cursor: not-allowed;
   }
@@ -66,7 +70,7 @@ const SignUpPage: React.FC<SignUpPageProps> = () => {
   const history = useHistory();
   const onSubmit = handleSubmit(async ({ email, password }) => {
     setIsLoading(true);
-    firebase
+    await firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
       .then((resp) => {
@@ -76,7 +80,7 @@ const SignUpPage: React.FC<SignUpPageProps> = () => {
       })
       .catch((error) => {});
     setIsLoading(false);
-    history.push('/protected');
+    history.push('/');
   });
   return (
     <FormWrapper>
@@ -99,11 +103,9 @@ const SignUpPage: React.FC<SignUpPageProps> = () => {
 
           {errors.password && <Error>This field is required</Error>}
         </InputWrapper>
-        <InputWrapper>
-          <SubmitButton type="submit" disabled={isLoading}>
-            Sign Up
-          </SubmitButton>
-        </InputWrapper>
+        <SubmitButton type="submit" disabled={isLoading}>
+          Sign Up
+        </SubmitButton>
       </StyledForm>
     </FormWrapper>
   );

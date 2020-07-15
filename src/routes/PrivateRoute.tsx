@@ -32,7 +32,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({
             children
           ) : (
             <Redirect
-              to={{ pathname: ROUTES.SIGN_IN, state: { from: location } }}
+              to={{ pathname: ROUTES.HOME, state: { from: location } }}
             />
           )
         // eslint-disable-next-line react/jsx-curly-newline
