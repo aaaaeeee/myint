@@ -1,7 +1,7 @@
-import React from "react";
-import styled from "styled-components";
-import LinkButton from "../ui/LinkButton";
-import * as ROUTES from "../../constants/routes";
+import React from 'react';
+import styled from 'styled-components';
+import LinkButton from '../ui/LinkButton';
+import * as ROUTES from '../../constants/routes';
 
 interface NavItemsProps {
   mobile?: boolean;
@@ -9,12 +9,12 @@ interface NavItemsProps {
 }
 const Nav = styled.nav<NavItemsProps>`
   display: flex;
-  margin-top: ${(props) => (props.mobile ? "-6rem" : null)};
+  margin-top: ${(props) => (props.mobile ? '-6rem' : null)};
 `;
 const Ul = styled.ul<NavItemsProps>`
   display: flex;
   align-items: center;
-  flex-direction: ${(props) => (props.mobile ? "column" : "row")};
+  flex-direction: ${(props) => (props.mobile ? 'column' : 'row')};
   height: 100%;
 `;
 
@@ -31,7 +31,7 @@ const NavItems: React.FC<NavItemsProps> = ({ mobile, clicked }) => {
         </LinkWrapper>
         <LinkWrapper>
           <LinkButton
-            title="Sign In"
+            title="Sign Up"
             linkTo={ROUTES.SIGN_UP}
             clicked={clicked}
           />

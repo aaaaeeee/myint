@@ -1,12 +1,16 @@
-import React from "react";
-import Layout from "../layout/Layout";
-import Routes from "../routes/Routes";
+import React from 'react';
+
+import Layout from '../layout/Layout';
+import Routes from '../routes/Routes';
+import AuthIsLoaded from '../components/common/AuthIsLoaded';
 
 const App = () => {
   return (
-    <Layout>
-      <Routes></Routes>
-    </Layout>
+    <AuthIsLoaded>
+      <Layout>
+        <Routes />
+      </Layout>
+    </AuthIsLoaded>
   );
 };
 

@@ -1,17 +1,18 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import { Provider } from "react-redux";
-import { ReactReduxFirebaseProvider } from "react-redux-firebase";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
+import { ReactReduxFirebaseProvider } from 'react-redux-firebase';
 
-import * as serviceWorker from "./serviceWorker";
-import store, { rrfProps } from "./store/store";
-import { ThemeProvider } from "styled-components";
-import { BrowserRouter as Router } from "react-router-dom";
+import { ThemeProvider } from 'styled-components';
+import { BrowserRouter as Router } from 'react-router-dom';
+import * as serviceWorker from './serviceWorker';
+import store, { rrfProps } from './store/store';
 
-import { GlobalStyles, theme } from "./styles/index";
+import { GlobalStyles, theme } from './styles/index';
 
 const render = () => {
-  const App = require("./app/App").default;
+  // eslint-disable-next-line global-require
+  const App = require('./app/App').default;
   ReactDOM.render(
     <Provider store={store}>
       <ReactReduxFirebaseProvider {...rrfProps}>
@@ -23,14 +24,14 @@ const render = () => {
         </Router>
       </ReactReduxFirebaseProvider>
     </Provider>,
-    document.getElementById("root")
+    document.getElementById('root')
   );
 };
 
 render();
 
-if (process.env.NODE_ENV === "development" && module.hot) {
-  module.hot.accept("./app/App", render);
+if (process.env.NODE_ENV === 'development' && module.hot) {
+  module.hot.accept('./app/App', render);
 }
 
 // If you want your app to work offline and load faster, you can change

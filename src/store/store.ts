@@ -1,20 +1,20 @@
-import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
-import firebase from "../firebase/firebase";
+import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import {
   getFirebase,
   actionTypes as rrfActionTypes,
-} from "react-redux-firebase";
+} from 'react-redux-firebase';
 import {
   constants as rfConstants,
   createFirestoreInstance,
-} from "redux-firestore";
-import rootReducer from "./rootReducer";
+} from 'redux-firestore';
+import firebase from '../firebase/firebase';
+import rootReducer from './rootReducer';
 
 const extraArgument = {
   getFirebase,
 };
 const rrfConfig = {
-  userProfile: "users",
+  userProfile: 'users',
   useFirestoreForProfile: true,
 };
 const middleware = [
@@ -29,7 +29,7 @@ const middleware = [
           (type) => `@@reactReduxFirebase/${type}`
         ),
       ],
-      ignoredPaths: ["firebase", "firestore"],
+      ignoredPaths: ['firebase', 'firestore'],
     },
     thunk: {
       extraArgument,

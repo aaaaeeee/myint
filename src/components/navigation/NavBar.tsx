@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import Container from '../../layout/Container';
+import { Container } from '../../layout/Container';
 import NavItems from './NavItems';
 import NavIcon from './NavItem/NavIcon';
 
