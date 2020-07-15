@@ -1,9 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
+import { isEmpty } from 'react-redux-firebase';
+import { useSelector } from 'react-redux';
+
 import LinkButton from '../ui/LinkButton';
 import * as ROUTES from '../../constants/routes';
 
 import SignOutButton from '../ui/SignOutButton';
+import { RootState } from '../../store/rootReducer';
 
 interface NavItemsProps {
   mobile?: boolean;
@@ -20,32 +24,37 @@ const Ul = styled.ul<NavItemsProps>`
   height: 100%;
 `;
 
-const LinkWrapper = styled.div`
+const LinkWrapper = styled.div<NavItemsProps>`
   font-size: 2rem;
-  margin: 10px;
+  margin: ${(props) => (props.mobile ? '1.5rem 0rem 1rem 0rem' : '0rem 1rem 0rem 0rem')};
 `;
 const NavItems: React.FC<NavItemsProps> = ({ mobile, clicked }) => {
+  const auth = useSelector((state: RootState) => state.firebase.auth);
   return (
     <Nav>
       <Ul mobile={mobile}>
-        <LinkWrapper>
+        <LinkWrapper mobile={mobile}>
           <LinkButton title="Home" linkTo={ROUTES.HOME} clicked={clicked} />
         </LinkWrapper>
-        <LinkWrapper>
-          <LinkButton
-            title="Sign In"
-            linkTo={ROUTES.SIGN_IN}
-            clicked={clicked}
-          />
-        </LinkWrapper>
-        <LinkWrapper>
-          <LinkButton
-            title="Sign Up"
-            linkTo={ROUTES.SIGN_UP}
-            clicked={clicked}
-          />
-        </LinkWrapper>
-        <SignOutButton />
+        {isEmpty(auth) ? (
+          <>
+            <LinkWrapper mobile={mobile}>
+              <LinkButton title="Sign In" linkTo={ROUTES.SIGN_IN} clicked={clicked} />
+            </LinkWrapper>
+            <LinkWrapper mobile={mobile}>
+              <LinkButton title="Sign Up" linkTo={ROUTES.SIGN_UP} clicked={clicked} />
+            </LinkWrapper>
+          </>
+        ) : (
+          <>
+            <LinkWrapper mobile={mobile}>
+              <LinkButton title="MyInt" linkTo={ROUTES.LANDING} clicked={clicked} />
+            </LinkWrapper>
+            <LinkWrapper mobile={mobile}>
+              <SignOutButton />
+            </LinkWrapper>
+          </>
+        )}
       </Ul>
     </Nav>
   );

@@ -11,29 +11,27 @@ interface LinkButtonProps {
   clicked?: () => void;
 }
 
-const MainWrapper = styled.div``;
 const LinkWrapper = styled(NavLink)`
   color: white;
+  padding: 1rem;
   &:hover {
-    font-weight: bold;
+    color: lightgrey;
   }
 `;
 const LinkButton: React.FC<LinkButtonProps> = ({ title, linkTo, clicked }) => {
   return (
-    <MainWrapper>
-      <LinkWrapper
-        exact
-        to={linkTo}
-        activeStyle={{
-          borderBottomWidth: 3,
-          borderBottomColor: 'whitesmoke',
-          borderBottomStyle: 'solid',
-        }}
-        onClick={clicked}
-      >
-        {title}
-      </LinkWrapper>
-    </MainWrapper>
+    <LinkWrapper
+      exact
+      to={linkTo}
+      activeStyle={{
+        borderBottomWidth: 3,
+        borderBottomColor: 'whitesmoke',
+        borderBottomStyle: 'solid',
+      }}
+      onClick={clicked}
+    >
+      {title}
+    </LinkWrapper>
   );
 };
 export default LinkButton;

@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { useFirebase } from 'react-redux-firebase';
 import { useHistory } from 'react-router-dom';
-import LinkWrapper from '../navigation/NavItem/LinkWrapper';
 
 interface SignOutButtonProps {}
 
@@ -11,9 +10,9 @@ const StyledButton = styled.button`
   color: white;
   font-size: 2rem;
   background: transparent;
-  padding: 10px;
+  padding: 1rem;
   &:hover {
-    font-weight: bold;
+    color: lightgrey;
   }
 `;
 
@@ -28,10 +27,6 @@ const SignOutButton: React.FC<SignOutButtonProps> = () => {
         history.push('/');
       });
   };
-  return (
-    <LinkWrapper>
-      <StyledButton onClick={() => handleSignOut()}>Sign Out</StyledButton>
-    </LinkWrapper>
-  );
+  return <StyledButton onClick={() => handleSignOut()}>Sign Out</StyledButton>;
 };
 export default SignOutButton;
