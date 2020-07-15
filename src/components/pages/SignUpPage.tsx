@@ -5,6 +5,7 @@ import { useHistory } from 'react-router-dom';
 import { useFirebase, useFirestore } from 'react-redux-firebase';
 import { DeepMap } from 'react-hook-form/dist/types/utils';
 import { FormWrapper, StyledForm } from '../../layout/Container';
+import Spinner from '../ui/Spinner';
 
 interface SignUpPageProps {}
 type FormData = {
@@ -48,7 +49,7 @@ const Title = styled.h1`
 const SubmitButton = styled.button`
   width: 100%;
   padding: 1rem 2rem;
-  margin-top: 3rem;
+  height: 5rem;
   border: none;
   font-size: 1.3rem;
   border-radius: 2rem;
@@ -60,6 +61,15 @@ const SubmitButton = styled.button`
   &:disabled {
     cursor: not-allowed;
   }
+`;
+
+const SubmitWrapper = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  height: 5rem;
+  margin-top: 3rem;
+  align-items: center;
 `;
 
 const SignUpPage: React.FC<SignUpPageProps> = () => {
@@ -78,34 +88,37 @@ const SignUpPage: React.FC<SignUpPageProps> = () => {
           email,
         });
       })
-      .catch((error) => {});
-    setIsLoading(false);
-    history.push('/');
+      .then(() => {
+        setIsLoading(false);
+        history.push('/');
+      })
+      .catch((error) => {
+        console.log('***', error);
+        setIsLoading(false);
+      });
   });
   return (
     <FormWrapper>
       <Title>Sign up here</Title>
       <StyledForm onSubmit={onSubmit}>
         <InputWrapper>
-          <FormInput
-            name="email"
-            placeholder="username"
-            ref={register({ required: true })}
-          />
+          <FormInput name="email" placeholder="username" ref={register({ required: true })} />
           {errors.email && <Error show={errors}>This field is required</Error>}
         </InputWrapper>
         <InputWrapper>
-          <FormInput
-            name="password"
-            placeholder="password"
-            ref={register({ required: true })}
-          />
+          <FormInput name="password" placeholder="password" ref={register({ required: true })} />
 
           {errors.password && <Error>This field is required</Error>}
         </InputWrapper>
-        <SubmitButton type="submit" disabled={isLoading}>
-          Sign Up
-        </SubmitButton>
+        <SubmitWrapper>
+          {isLoading ? (
+            <Spinner color="white" />
+          ) : (
+            <SubmitButton type="submit" disabled={isLoading}>
+              Sign Up
+            </SubmitButton>
+          )}
+        </SubmitWrapper>
       </StyledForm>
     </FormWrapper>
   );

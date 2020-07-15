@@ -5,6 +5,7 @@ import { useHistory } from 'react-router-dom';
 import { useFirebase } from 'react-redux-firebase';
 import { DeepMap } from 'react-hook-form/dist/types/utils';
 import { FormWrapper, StyledForm } from '../../layout/Container';
+import Spinner from '../ui/Spinner';
 
 interface SignInPageProps {}
 type FormData = {
@@ -48,14 +49,27 @@ const Title = styled.h1`
 const SubmitButton = styled.button`
   width: 100%;
   padding: 1rem 2rem;
-  margin-top: 3rem;
+  height: 5rem;
   border: none;
   font-size: 1.3rem;
   border-radius: 2rem;
   color: ${({ theme }) => theme.colors.main};
+  background-color: white;
+  &:hover {
+    font-weight: bold;
+  }
   &:disabled {
     cursor: not-allowed;
   }
+`;
+
+const SubmitWrapper = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  height: 5rem;
+  margin-top: 3rem;
+  align-items: center;
 `;
 
 const SignInPage: React.FC<SignInPageProps> = () => {
@@ -64,42 +78,38 @@ const SignInPage: React.FC<SignInPageProps> = () => {
   const firebase = useFirebase();
   const history = useHistory();
   const onSubmit = handleSubmit(async ({ email, password }) => {
-    setIsLoading(true);
-    await firebase
-      .auth()
-      .signInWithEmailAndPassword(email, password)
-      .then((resp) => {
-        setIsLoading(false);
-      })
-      .catch((error) => {});
-    history.push('/');
+    try {
+      setIsLoading(true);
+      await firebase.auth().signInWithEmailAndPassword(email, password);
+    } catch (error) {
+      console.log('**error');
+    } finally {
+      setIsLoading(false);
+      history.push('/');
+    }
   });
   return (
     <FormWrapper>
       <Title>Sign in</Title>
       <StyledForm onSubmit={onSubmit}>
         <InputWrapper>
-          <FormInput
-            name="email"
-            placeholder="username"
-            ref={register({ required: true })}
-          />
+          <FormInput name="email" placeholder="username" ref={register({ required: true })} />
           {errors.email && <Error show={errors}>This field is required</Error>}
         </InputWrapper>
         <InputWrapper>
-          <FormInput
-            name="password"
-            placeholder="password"
-            ref={register({ required: true })}
-          />
+          <FormInput name="password" placeholder="password" ref={register({ required: true })} />
 
           {errors.password && <Error>This field is required</Error>}
         </InputWrapper>
-        <InputWrapper>
-          <SubmitButton type="submit" disabled={isLoading}>
-            Sign In
-          </SubmitButton>
-        </InputWrapper>
+        <SubmitWrapper>
+          {isLoading ? (
+            <Spinner color="white" />
+          ) : (
+            <SubmitButton type="submit" disabled={isLoading}>
+              Sign In
+            </SubmitButton>
+          )}
+        </SubmitWrapper>
       </StyledForm>
     </FormWrapper>
   );

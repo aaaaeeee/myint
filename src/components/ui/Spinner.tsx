@@ -1,16 +1,18 @@
 import React from 'react';
 import styled from 'styled-components';
 
-interface SpinnerProps {}
+interface SpinnerProps {
+  color?: string;
+}
 
-const StyledSpinner = styled.svg`
+const StyledSpinner = styled.svg<SpinnerProps>`
   animation: rotate 2s linear infinite;
   margin: -25px 0 0 -25px;
   width: 50px;
   height: 50px;
 
   & .path {
-    stroke: ${({ theme }) => theme.colors.main};
+    stroke: ${(props) => (props.color ? 'white' : ({ theme }) => theme.colors.main)};
     stroke-linecap: round;
     animation: dash 1.5s ease-in-out infinite;
   }
@@ -35,17 +37,10 @@ const StyledSpinner = styled.svg`
     }
   }
 `;
-const Spinner: React.FC<SpinnerProps> = () => {
+const Spinner: React.FC<SpinnerProps> = ({ color }) => {
   return (
-    <StyledSpinner viewBox="0 0 50 50">
-      <circle
-        className="path"
-        cx="25"
-        cy="25"
-        r="20"
-        fill="none"
-        strokeWidth="4"
-      />
+    <StyledSpinner viewBox="0 0 50 50" color={color}>
+      <circle className="path" cx="25" cy="25" r="20" fill="none" strokeWidth="4" />
     </StyledSpinner>
   );
 };

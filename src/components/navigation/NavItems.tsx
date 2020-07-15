@@ -29,7 +29,7 @@ const NavItems: React.FC<NavItemsProps> = ({ mobile, clicked }) => {
     <Nav>
       <Ul mobile={mobile}>
         <LinkWrapper>
-          <LinkButton title="Home" linkTo={ROUTES.LANDING} clicked={clicked} />
+          <LinkButton title="Home" linkTo={ROUTES.HOME} clicked={clicked} />
         </LinkWrapper>
         <LinkWrapper>
           <LinkButton
