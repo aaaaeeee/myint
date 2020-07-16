@@ -19,8 +19,8 @@ const StyledButton = styled.button`
 const SignOutButton: React.FC<SignOutButtonProps> = () => {
   const firebase = useFirebase();
   const history = useHistory();
-  const handleSignOut = () => {
-    firebase
+  const handleSignOut = async () => {
+    await firebase
       .auth()
       .signOut()
       .then(() => {

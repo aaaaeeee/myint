@@ -5,6 +5,7 @@ import HomePage from '../components/pages/HomePage';
 import SignUpPage from '../components/pages/SignUpPage';
 import PrivateRoute from './PrivateRoute';
 import SignInPage from '../components/pages/SignInPage';
+import ProfilePage from '../components/pages/ProfilePage';
 
 interface RoutesProps {}
 
@@ -22,6 +23,9 @@ const Routes: React.FC<RoutesProps> = () => {
       </Route>
       <PrivateRoute exact path="/">
         <div>Protected content</div>
+      </PrivateRoute>
+      <PrivateRoute exact path="/profile">
+        <ProfilePage />
       </PrivateRoute>
       <Redirect to="/" />
     </Switch>

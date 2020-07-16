@@ -74,6 +74,7 @@ const SubmitWrapper = styled.div`
 
 const SignUpPage: React.FC<SignUpPageProps> = () => {
   const [isLoading, setIsLoading] = React.useState(false);
+  const [firebaseErrors, setFirebaseErrors] = React.useState('');
   const { register, handleSubmit, errors } = useForm<FormData>();
   const firebase = useFirebase();
   const firestore = useFirestore();
@@ -92,8 +93,8 @@ const SignUpPage: React.FC<SignUpPageProps> = () => {
         setIsLoading(false);
         history.push('/');
       })
-      .catch((error) => {
-        console.log('***', error);
+      .catch(({ code }) => {
+        setFirebaseErrors(code);
         setIsLoading(false);
       });
   });
@@ -101,13 +102,13 @@ const SignUpPage: React.FC<SignUpPageProps> = () => {
     <FormWrapper>
       <Title>Sign up here</Title>
       <StyledForm onSubmit={onSubmit}>
+        {firebaseErrors && <Error>{firebaseErrors}</Error>}
         <InputWrapper>
           <FormInput name="email" placeholder="username" ref={register({ required: true })} />
           {errors.email && <Error show={errors}>This field is required</Error>}
         </InputWrapper>
         <InputWrapper>
           <FormInput name="password" placeholder="password" ref={register({ required: true })} />
-
           {errors.password && <Error>This field is required</Error>}
         </InputWrapper>
         <SubmitWrapper>

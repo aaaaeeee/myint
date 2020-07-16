@@ -1,12 +1,6 @@
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
-import {
-  getFirebase,
-  actionTypes as rrfActionTypes,
-} from 'react-redux-firebase';
-import {
-  constants as rfConstants,
-  createFirestoreInstance,
-} from 'redux-firestore';
+import { getFirebase, actionTypes as rrfActionTypes } from 'react-redux-firebase';
+import { constants as rfConstants, createFirestoreInstance } from 'redux-firestore';
 import firebase from '../firebase/firebase';
 import rootReducer from './rootReducer';
 
@@ -25,9 +19,7 @@ const middleware = [
         ...Object.keys(rfConstants.actionTypes).map(
           (type) => `${rfConstants.actionsPrefix}/${type}`
         ),
-        ...Object.keys(rrfActionTypes).map(
-          (type) => `@@reactReduxFirebase/${type}`
-        ),
+        ...Object.keys(rrfActionTypes).map((type) => `@@reactReduxFirebase/${type}`),
       ],
       ignoredPaths: ['firebase', 'firestore'],
     },

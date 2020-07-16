@@ -2,10 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import { isEmpty } from 'react-redux-firebase';
 import { useSelector } from 'react-redux';
-
 import LinkButton from '../ui/LinkButton';
 import * as ROUTES from '../../constants/routes';
-
 import SignOutButton from '../ui/SignOutButton';
 import { RootState } from '../../store/rootReducer';
 
@@ -50,6 +48,11 @@ const NavItems: React.FC<NavItemsProps> = ({ mobile, clicked }) => {
             <LinkWrapper mobile={mobile}>
               <LinkButton title="MyInt" linkTo={ROUTES.LANDING} clicked={clicked} />
             </LinkWrapper>
+            {mobile && (
+              <LinkWrapper mobile={mobile}>
+                <LinkButton title="MyProfile" linkTo={ROUTES.PROFILE} clicked={clicked} />
+              </LinkWrapper>
+            )}
             <LinkWrapper mobile={mobile}>
               <SignOutButton />
             </LinkWrapper>
