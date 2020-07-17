@@ -87,6 +87,7 @@ const SignUpPage: React.FC<SignUpPageProps> = () => {
       .then((resp) => {
         return firestore.collection('users').doc(resp.user?.uid).set({
           email,
+          username: email,
         });
       })
       .then(() => {

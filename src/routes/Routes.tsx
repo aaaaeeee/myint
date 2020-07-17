@@ -5,7 +5,8 @@ import HomePage from '../components/pages/HomePage';
 import SignUpPage from '../components/pages/SignUpPage';
 import PrivateRoute from './PrivateRoute';
 import SignInPage from '../components/pages/SignInPage';
-import ProfilePage from '../components/pages/ProfilePage';
+import ProfilePage from '../components/pages/MyProfilePage';
+import MyIntPage from '../components/pages/MyIntPage';
 
 interface RoutesProps {}
 
@@ -22,7 +23,7 @@ const Routes: React.FC<RoutesProps> = () => {
         <SignUpPage />
       </Route>
       <PrivateRoute exact path="/">
-        <div>Protected content</div>
+        <MyIntPage />
       </PrivateRoute>
       <PrivateRoute exact path="/profile">
         <ProfilePage />

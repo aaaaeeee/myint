@@ -74,6 +74,7 @@ const SubmitWrapper = styled.div`
 
 const SignInPage: React.FC<SignInPageProps> = () => {
   const [isLoading, setIsLoading] = React.useState(false);
+  const [firebaseErrors, setFirebaseErrors] = React.useState('');
   const { register, handleSubmit, errors } = useForm<FormData>();
   const firebase = useFirebase();
   const history = useHistory();
@@ -81,8 +82,8 @@ const SignInPage: React.FC<SignInPageProps> = () => {
     try {
       setIsLoading(true);
       await firebase.auth().signInWithEmailAndPassword(email, password);
-    } catch (error) {
-      console.log('**error');
+    } catch ({ code }) {
+      setFirebaseErrors(code);
     } finally {
       setIsLoading(false);
       history.push('/');
@@ -92,6 +93,7 @@ const SignInPage: React.FC<SignInPageProps> = () => {
     <FormWrapper>
       <Title>Sign in</Title>
       <StyledForm onSubmit={onSubmit}>
+        {firebaseErrors && <Error>{firebaseErrors}</Error>}
         <InputWrapper>
           <FormInput name="email" placeholder="username" ref={register({ required: true })} />
           {errors.email && <Error show={errors}>This field is required</Error>}
