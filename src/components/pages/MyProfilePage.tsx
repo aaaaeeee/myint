@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import { useSelector } from 'react-redux';
 import { useForm, FieldError } from 'react-hook-form';
 import { DeepMap } from 'react-hook-form/dist/types/utils';
@@ -7,7 +7,9 @@ import { useFirebase, useFirestore } from 'react-redux-firebase';
 import { RootState } from '../../store/rootReducer';
 import { FormWrapper, StyledForm } from '../../layout/Container';
 import Spinner from '../ui/Spinner';
-import Modal from '../modal/Modal';
+import Modal from '../common/Modal/Modal';
+import Button from '../ui/Button';
+import Heading from '../ui/Heading';
 
 interface ProfilePageProps {}
 type FormData = {
@@ -36,6 +38,7 @@ const FormInput = styled.input`
   font-size: 1.3rem;
   border-radius: 2rem;
   color: ${({ theme }) => theme.colors.main};
+  height: 4rem;
 `;
 
 const Error = styled.div<StyleProps>`
@@ -44,10 +47,6 @@ const Error = styled.div<StyleProps>`
   font-weight: bold;
 `;
 
-const Title = styled.h1`
-  color: white;
-  margin-bottom: 2.5rem;
-`;
 const SubmitButton = styled.button`
   width: 100%;
   padding: 1rem 2rem;
@@ -57,23 +56,7 @@ const SubmitButton = styled.button`
   border-radius: 2rem;
   color: ${({ theme }) => theme.colors.main};
   background-color: white;
-  &:hover {
-    font-weight: bold;
-  }
-  &:disabled {
-    cursor: not-allowed;
-  }
-`;
-
-const DeleteButton = styled.button`
-  width: 100%;
-  padding: 1rem 2rem;
-  height: 5rem;
-  border: none;
-  font-size: 1.3rem;
-  border-radius: 2rem;
-  color: ${({ theme }) => theme.colors.errorRed};
-  background-color: white;
+  margin: 3rem 0rem;
   &:hover {
     font-weight: bold;
   }
@@ -86,44 +69,13 @@ const SubmitWrapper = styled.div`
   display: flex;
   width: 100%;
   justify-content: center;
-  height: 5rem;
-  margin-top: 3rem;
   align-items: center;
-`;
-
-const ModalWrapper = styled.div`
-  margin: 2rem 0rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const ModalText = styled.p`
-  font-size: 2rem;
-  color: ${({ theme }) => theme.colors.errorRed};
-  text-align: center;
-  margin-bottom: 2rem;
-`;
-
-const ModalDeleteButton = styled.button`
-  width: 100%;
-  max-width: 35rem;
-  padding: 1rem 2rem;
-  height: 5rem;
-  border: none;
-  font-size: 1.3rem;
-  border-radius: 2rem;
-  color: white;
-  background-color: ${({ theme }) => theme.colors.errorRed};
-  &:hover {
-    font-weight: bold;
-  }
-  &:disabled {
-    cursor: not-allowed;
-  }
 `;
 
 const ProfilePage: React.FC<ProfilePageProps> = () => {
+  const theme = useTheme();
+
+  const [modalOpened, setModalOpened] = React.useState(false);
   const profile = useSelector((state: RootState) => state.firebase.profile);
   const uid = useSelector((state: RootState) => state.firebase.auth.uid);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -155,10 +107,11 @@ const ProfilePage: React.FC<ProfilePageProps> = () => {
 
   const handleRemove = async () => {
     setIsLoading(true);
+    setModalOpened(false);
     const user = firebase.auth().currentUser;
     try {
-      await user?.delete();
       await firestore.collection('users').doc(uid).delete();
+      await user?.delete();
       setIsLoading(false);
     } catch ({ code }) {
       setFirebaseErrors(code);
@@ -167,7 +120,9 @@ const ProfilePage: React.FC<ProfilePageProps> = () => {
   };
   return (
     <FormWrapper>
-      <Title>Hello {profile.email} edit you profile</Title>
+      <Heading size="h3" bold color={theme.colors.whiteColor}>
+        Hello {profile.email} update you profile
+      </Heading>
       <StyledForm onSubmit={onSubmit}>
         {firebaseErrors && <Error>{firebaseErrors}</Error>}
         <InputWrapper>
@@ -178,32 +133,53 @@ const ProfilePage: React.FC<ProfilePageProps> = () => {
           <FormInput name="password" placeholder="password" ref={register} />
           {errors.password && <Error>This field is required</Error>}
         </InputWrapper>
-        <SubmitWrapper>
-          {isLoading ? (
+        {isLoading ? (
+          <SubmitWrapper>
             <Spinner color="white" />
-          ) : (
-            <SubmitButton type="submit" disabled={isLoading}>
-              Update profile
-            </SubmitButton>
-          )}
-        </SubmitWrapper>
-        <SubmitWrapper>
-          <Modal
-            activator={({ setShow }) => (
-              <DeleteButton type="button" onClick={() => setShow(true)} disabled={isLoading}>
-                Delete profile
-              </DeleteButton>
-            )}
-          >
-            <ModalWrapper>
-              <ModalText>Are you sure you want to delete your profile?</ModalText>
-              <ModalDeleteButton type="button" onClick={() => handleRemove()} disabled={isLoading}>
-                Delete
-              </ModalDeleteButton>
-            </ModalWrapper>
-          </Modal>
-        </SubmitWrapper>
+          </SubmitWrapper>
+        ) : (
+          <>
+            <SubmitWrapper>
+              <SubmitButton type="submit" disabled={isLoading}>
+                Update profile
+              </SubmitButton>
+            </SubmitWrapper>
+            <SubmitWrapper>
+              <Button
+                title="Delete Profile"
+                disabled={isLoading}
+                onClick={() => setModalOpened(true)}
+                color={theme.colors.whiteColor}
+                backgroundColor={theme.colors.errorRed}
+              />
+            </SubmitWrapper>
+          </>
+        )}
       </StyledForm>
+      <Modal opened={modalOpened} close={() => setModalOpened(false)}>
+        {isLoading ? (
+          <SubmitWrapper>
+            <Spinner color="white" />
+          </SubmitWrapper>
+        ) : (
+          <>
+            <Heading size="h2">Are you sure you want to remove your profile?</Heading>
+            <Button
+              title="Delete Profile"
+              disabled={isLoading}
+              onClick={() => handleRemove()}
+              color={theme.colors.whiteColor}
+              backgroundColor={theme.colors.errorRed}
+            />
+            <Button
+              title="Cancel"
+              disabled={isLoading}
+              onClick={() => setModalOpened(false)}
+              noMargin
+            />
+          </>
+        )}
+      </Modal>
     </FormWrapper>
   );
 };

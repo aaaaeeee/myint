@@ -82,11 +82,11 @@ const SignInPage: React.FC<SignInPageProps> = () => {
     try {
       setIsLoading(true);
       await firebase.auth().signInWithEmailAndPassword(email, password);
-    } catch ({ code }) {
-      setFirebaseErrors(code);
-    } finally {
       setIsLoading(false);
       history.push('/');
+    } catch ({ code }) {
+      setFirebaseErrors(code);
+      setIsLoading(false);
     }
   });
   return (
